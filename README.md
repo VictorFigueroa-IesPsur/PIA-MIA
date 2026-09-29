@@ -21,6 +21,8 @@ Y me he propuesto ampliar mis conocimientos sobre la IA y Big Data
   - JS
   - Python
 
+Tengo experiencia aprendida en los ciclos formativos y practicas sobre: SQL, Docker, Administración de servidores HTTPS, DNS, DHCP, Routing, Virtualización...
+
 > **Expectativas sobre el curso**
 Espero aprender mucho ya que es un campo muy solicitado y lleno de investigación para exprimir
 el temario es muy interesante y la practica tiene pinta que tambien lo va a ser
