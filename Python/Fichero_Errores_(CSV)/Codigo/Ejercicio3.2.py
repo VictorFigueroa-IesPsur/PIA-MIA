@@ -53,7 +53,7 @@ for fila in filas:
         lsep_virginica= fila["largo_sep"] + lsep_virginica
         apet_virginica= fila["ancho_pet"] + apet_virginica
         asep_virginica= fila["ancho_sep"] + asep_virginica
-
+print("")
 print(f"Medias")
 print("=======")
 print("                   Setosas                 Virginicas               Versicolor")
