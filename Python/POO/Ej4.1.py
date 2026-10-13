@@ -13,7 +13,6 @@ class CuentaBancaria:
         return self._saldo
     
     def retirar(self,cantidad):
-        
         if cantidad > self._saldo :
             print("")
             raise SaldoInsuficiente(f"Saldo insuficiente para retirar, su saldo es de : {self.saldo}€")
