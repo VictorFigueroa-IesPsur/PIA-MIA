@@ -71,17 +71,23 @@ class Dataset:
     def dividir(self, proporcion: float = 0.8, semilla: int = 42):
         """Baraja y parte en entrenamiento y prueba de forma reproducible."""
         random.Random(semilla).shuffle(muestras) # Esta línea baraja la lista de muestras        ...
+
         corte=int(self.__len__* proporcion)
-        Muestras[:corte]
+        entrenamiento=list[self.muestras[:corte]]
+        prueba=list[self.muestras[corte:]]
+        #completar
 
     def rangos(self) -> list[tuple[float, float]]:
         """Mínimo y máximo de cada característica."""
-        ...#Completar
+        #completar
 
 
     def normalizar(self, rangos: list[tuple[float, float]]) -> "Dataset":
         """Escala cada característica al rango 0-1 con los rangos dados."""
         ...#Completar
+        min(rangos)
+        max(rangos)
+
 
 
     def resumen_por_clase(self) -> dict[str, dict[str, float]]:
@@ -152,7 +158,7 @@ class ClasificadorKNN(Modelo):
 
     @staticmethod
     def distancia(a: list[float], b: list[float]) -> float:
-        ...#Completar
+        ...#Completar (Calcular la distacia con la formula)
 
 
     def _votar(self, muestra: Muestra) -> str:
@@ -160,7 +166,7 @@ class ClasificadorKNN(Modelo):
             self._entrenamiento,
             key=lambda m: self.distancia(muestra.medidas, m.medidas),
         )[: self.k]
-        ...#Completar
+        ...#Completar (Calcular el más probable con la distancia calculada)
 
 
     def predecir(self, muestras) -> list[str]:
