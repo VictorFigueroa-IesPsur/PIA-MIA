@@ -70,9 +70,9 @@ class Dataset:
 
     def dividir(self, proporcion: float = 0.8, semilla: int = 42):
         """Baraja y parte en entrenamiento y prueba de forma reproducible."""
-        ...
         random.Random(semilla).shuffle(muestras) # Esta línea baraja la lista de muestras        ...
-        ... #Completar
+        corte=int(self.__len__* proporcion)
+        Muestras[:corte]
 
     def rangos(self) -> list[tuple[float, float]]:
         """Mínimo y máximo de cada característica."""
@@ -96,7 +96,6 @@ class Dataset:
                 "max": max(valores),
             }
         return resumen
-
 
 # -------------------------------------------------------------------- modelos
 class Modelo(ABC):
