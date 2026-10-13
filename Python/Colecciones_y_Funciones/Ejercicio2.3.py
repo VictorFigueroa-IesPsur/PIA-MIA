@@ -21,7 +21,6 @@ while opcion != 5:
         print (Agenda)
         input("Haga click para continuar...")
         continue
-
     if opcion == 2:
             n=str(input("Indique el nombre del contacto: "))
             Agenda.pop(n)
@@ -32,5 +31,9 @@ while opcion != 5:
     if opcion == 3:
             n=str(input("Indique el nombre del contacto: "))
             print("tlf: "+Agenda[n])
+            input("Haga click para continuar...")
+            continue
+    if opcion == 4:
+            print(sorted(Agenda))
             input("Haga click para continuar...")
             continue
