@@ -1,8 +1,7 @@
-#Cambiar por completo para poder probar el metodo
 import sys
 from pathlib import Path
  
-from knn_base import DatosInvalidosError, Dataset, ModeloMayoritario
+from knn_base import ClasificadorKNN, DatosInvalidosError, Dataset, ModeloMayoritario
  
 RUTA_POR_DEFECTO = Path(__file__).parent / "iris.csv"
  
@@ -16,19 +15,23 @@ def main(ruta: Path) -> None:
         print(f"  {clase:<14}{est['n']:>3} muestras · "
               f"largo_pet medio {est['media']:.2f}")
  
-    # Entrenar y evaluar con el conjunto completo (provisional: ya que luego deberás dividir en entrenamiento y prueba y normalizar los datos antes de realizar el entrenamiento)
-    modelo = ModeloMayoritario().entrenar(datos)
-    predicciones = modelo.predecir(datos)
+    entrenamiento, prueba = datos.dividir(0.8, 42)
+    rangos = entrenamiento.rangos()
+    entrenamiento = entrenamiento.normalizar(rangos)
+    prueba = prueba.normalizar(rangos)
+
+    modelo = ClasificadorKNN(k=7).entrenar(entrenamiento)
+    predicciones = modelo.predecir(prueba)
  
     print(f"\nModelo: {modelo}")
     print(f"Clase aprendida: {predicciones[0]}")
-    print(f"Acierto: {modelo.evaluar(datos):.1%}  "
-          f"(sobre los mismos datos del entrenamiento)")
+    print(f"Acierto: {modelo.evaluar(prueba):.1%}  "
+          f"(sobre los datos de prueba)")
  
     print("\nAcierto por clase:")
-    for clase in datos.clases:
-        total = sum(1 for m in datos if m.clase == clase)
-        bien = sum(1 for m, p in zip(datos, predicciones)
+    for clase in prueba.clases:
+        total = sum(1 for m in prueba if m.clase == clase)
+        bien = sum(1 for m, p in zip(prueba, predicciones)
                    if m.clase == clase and p == clase)
         print(f"  {clase:<14}{bien:>4}/{total:<5}{bien / total:>6.0%}")
  

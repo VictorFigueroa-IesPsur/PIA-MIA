@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import math
 import random
 import sys
 from abc import ABC, abstractmethod
@@ -68,25 +69,31 @@ class Dataset:
     def clases(self) -> list[str]:
         return sorted({m.clase for m in self.muestras})
 
-    def dividir(self, proporcion: float = 0.8, semilla: int = 42):
+    def dividir(self, proporcion: float = 0.8, semilla: int = 42) -> tuple["Dataset", "Dataset"]:
         """Baraja y parte en entrenamiento y prueba de forma reproducible."""
-        random.Random(semilla).shuffle(muestras) # Esta línea baraja la lista de muestras        ...
-
-        corte=int(self.__len__* proporcion)
-        entrenamiento=list[self.muestras[:corte]]
-        prueba=list[self.muestras[corte:]]
-        #completar
+        copia = list(self.muestras)
+        random.Random(semilla).shuffle(copia)
+        corte = int(len(copia) * proporcion)
+        return Dataset(copia[:corte]), Dataset(copia[corte:])
 
     def rangos(self) -> list[tuple[float, float]]:
         """Mínimo y máximo de cada característica."""
-        #completar
+        if not self.muestras:
+            return []
+        columnas = zip(*(m.medidas for m in self.muestras))
+        return [(min(col), max(col)) for col in columnas]
 
 
     def normalizar(self, rangos: list[tuple[float, float]]) -> "Dataset":
         """Escala cada característica al rango 0-1 con los rangos dados."""
-        ...#Completar
-        min(rangos)
-        max(rangos)
+        muestras_norm = []
+        for m in self.muestras:
+            medidas_escaladas = [
+                (valor - minimo) / (maximo - minimo) if maximo != minimo else 0.0
+                for valor, (minimo, maximo) in zip(m.medidas, rangos)
+            ]
+            muestras_norm.append(Muestra(medidas_escaladas, m.clase))
+        return Dataset(muestras_norm)
 
 
 
@@ -158,7 +165,7 @@ class ClasificadorKNN(Modelo):
 
     @staticmethod
     def distancia(a: list[float], b: list[float]) -> float:
-        ...#Completar (Calcular la distacia con la formula)
+        return math.sqrt(sum((x - y) ** 2 for x, y in zip(a, b)))
 
 
     def _votar(self, muestra: Muestra) -> str:
@@ -166,11 +173,9 @@ class ClasificadorKNN(Modelo):
             self._entrenamiento,
             key=lambda m: self.distancia(muestra.medidas, m.medidas),
         )[: self.k]
-        ...#Completar (Calcular el más probable con la distancia calculada)
-
+        return Counter(v.clase for v in vecinos).most_common(1)[0][0]
 
     def predecir(self, muestras) -> list[str]:
         if self._entrenamiento is None:
             raise RuntimeError("El modelo no está entrenado")
         return [self._votar(m) for m in muestras]
-
